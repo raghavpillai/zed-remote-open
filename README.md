@@ -2,7 +2,7 @@
 
 Opens a Zed remote project from a remote SSH session, similar to `code .` with VS Code.
 
-Leverages [Zed's native remote development](https://zed.dev/docs/remote-development) via `zed ssh://host/path`.
+Built on top of [Zed's native remote development](https://zed.dev/docs/remote-development), which already supports `zed ssh://host/path` from the local CLI. This just bridges the gap so you can run `zed .` from the remote side too.
 
 ## How it works
 
@@ -182,8 +182,10 @@ echo "Opening Zed at $dir"
 - Test directly: `zed ssh://your-host/home/user`
 - Make sure Zed's remote development is working (see [Zed docs](https://zed.dev/docs/remote-development))
 
-## Design decisions
+## Why it works this way
 
-- **Uses Zed's native `ssh://` protocol** — no helper scripts needed on the local side, just a single `zed ssh://host/path` CLI call.
-- **Port 7682** — one port above the Ghostty listener (7681) to avoid conflicts. Can be changed in listener, SSH config, and remote script.
-- **Full path to `zed` binary** (`/usr/local/bin/zed`) in the listener — launchd runs with a minimal PATH, so the absolute path is required.
+Zed already supports `zed ssh://host/path` natively, so the listener just calls that directly. No helper scripts needed on the local side.
+
+The listener uses the full path `/usr/local/bin/zed` because launchd runs with a minimal PATH and won't find `zed` otherwise.
+
+Port 7682 (one above the Ghostty listener at 7681). Change it in the listener, SSH config, and remote script if needed.
