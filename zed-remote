@@ -7,7 +7,7 @@
 #   - RemoteForward 7682 127.0.0.1:7682 in SSH config for this host
 #
 # ZED_SSH_HOST must be set to the SSH config alias for this server.
-# Set it in your shell config, e.g.: export ZED_SSH_HOST="zealot-server"
+# Set it in your shell config, e.g.: export ZED_SSH_HOST="my-server"
 
 dir="${1:-.}"
 dir=$(cd "$dir" 2>/dev/null && pwd) || { echo "zed: cannot access '$1'"; exit 1; }

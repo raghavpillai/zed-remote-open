@@ -7,13 +7,13 @@ Built on top of [Zed's native remote development](https://zed.dev/docs/remote-de
 ## How it works
 
 ```
-You (SSH'd into zealot-server)
+You (SSH'd into my-server)
   │
   │  zed .
   │
   ▼
-~/.local/bin/zed (on zealot-server)
-  │  Sends "zealot-server:/current/dir" to localhost:7682
+~/.local/bin/zed (on my-server)
+  │  Sends "my-server:/current/dir" to localhost:7682
   │
   ▼
 SSH Reverse Tunnel (RemoteForward 7682)
@@ -21,7 +21,7 @@ SSH Reverse Tunnel (RemoteForward 7682)
   │
   ▼
 ~/.local/bin/zed-listener (on Mac, launchd service)
-  │  Receives request, runs: zed ssh://zealot-server/current/dir
+  │  Receives request, runs: zed ssh://my-server/current/dir
   │
   ▼
 Zed opens with a remote SSH project at that directory
@@ -127,10 +127,9 @@ Launchd service that auto-starts `zed-listener` on login and keeps it running.
 The `RemoteForward` line creates a reverse tunnel: anything connecting to port 7682 on the remote server gets forwarded back to port 7682 on your Mac.
 
 ```
-Host zealot-server
-    HostName 192.168.91.106
-    User raghav
-    SetEnv TERM=xterm-256color
+Host my-server
+    HostName <ip-or-hostname>
+    User <username>
     RemoteForward 7682 127.0.0.1:7682
 ```
 
@@ -146,7 +145,7 @@ The command you actually type. Resolves the target directory to an absolute path
 # Usage: zed [directory]  (defaults to current directory)
 #
 # ZED_SSH_HOST must be set to the SSH config alias for this server.
-# Set it in your shell config, e.g.: export ZED_SSH_HOST="zealot-server"
+# Set it in your shell config, e.g.: export ZED_SSH_HOST="my-server"
 
 dir="${1:-.}"
 dir=$(cd "$dir" 2>/dev/null && pwd) || { echo "zed: cannot access '$1'"; exit 1; }
